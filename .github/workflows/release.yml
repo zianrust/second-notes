@@ -73,12 +73,12 @@ jobs:
           VERSION=${{ steps.version.outputs.VERSION }}
           if [ "${{ steps.version.outputs.IS_PRERELEASE }}" = "true" ]; then
             cp android/app/build/outputs/apk/standard/beta/app-standard-beta.apk \
-               apk-output/simple-notes-sync-v${VERSION}-standard.apk
+               apk-output/second-notes-v${VERSION}-standard.apk
           else
             cp android/app/build/outputs/apk/standard/release/app-standard-release.apk \
-               apk-output/simple-notes-sync-v${VERSION}-standard.apk
+               apk-output/second-notes-v${VERSION}-standard.apk
             cp android/app/build/outputs/apk/fdroid/release/app-fdroid-release.apk \
-               apk-output/simple-notes-sync-v${VERSION}-fdroid.apk
+               apk-output/second-notes-v${VERSION}-fdroid.apk
           fi
           echo "✅ APK files prepared:"
           ls -lh apk-output/
@@ -122,14 +122,14 @@ jobs:
 
           | Variant | File | Info |
           |---------|------|------|
-          | **Beta** | \`simple-notes-sync-v${VERSION}-standard.apk\` | Works on all devices |
+          | **Beta** | \`second-notes-v${VERSION}-standard.apk\` | Works on all devices |
           EOF
           else
             cat <<EOF >> $GITHUB_ENV
           | Variant | File | Info |
           |---------|------|------|
-          | **🏆 Recommended** | \`simple-notes-sync-v${VERSION}-standard.apk\` | Standard version (works on all devices) |
-          | F-Droid | \`simple-notes-sync-v${VERSION}-fdroid.apk\` | For F-Droid Store |
+          | **🏆 Recommended** | \`second-notes-v${VERSION}-standard.apk\` | Standard version (works on all devices) |
+          | F-Droid | \`second-notes-v${VERSION}-fdroid.apk\` | For F-Droid Store |
           EOF
           fi
           echo "GHADELIMITER" >> $GITHUB_ENV
@@ -137,7 +137,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "📝 Simple Notes Sync v${{ steps.version.outputs.VERSION }}"
+          name: "📝 Second Notes v${{ steps.version.outputs.VERSION }}"
           # Finale Releases bleiben Draft (manuell prüfen und veröffentlichen).
           # Pre-Releases gehen direkt raus, sonst wartet der Tester auf einen Klick.
           draft: ${{ steps.version.outputs.IS_PRERELEASE != 'true' }}
@@ -173,7 +173,7 @@ jobs:
 
             **Expected SHA-256:**
             ```
-            42:A1:C6:13:BB:C6:73:04:5A:F3:DC:81:91:BF:9C:B6:45:6E:E4:4C:7D:CE:40:C7:CF:B5:66:FA:CB:69:F1:6A
+            F3:57:E7:FF:95:92:07:84:F5:74:82:DF:D1:82:C7:76:C1:C3:9B:10:FC:1E:14:E1:EA:01:C0:C7:D3:63:0E:1C
             ```
 
             **[📖 Documentation](https://github.com/inventory69/simple-notes-sync/blob/main/QUICKSTART.md)** · **[🐛 Report Bug](https://github.com/inventory69/simple-notes-sync/issues)**
