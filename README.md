@@ -35,7 +35,7 @@ alt="Get it on Google Play" align="center" height="80" /></a>
 </div>
 
 <div align="center">
-<strong>SHA-256 hash of the signing certificate:</strong><br />42:A1:C6:13:BB:C6:73:04:5A:F3:DC:81:91:BF:9C:B6:45:6E:E4:4C:7D:CE:40:C7:CF:B5:66:FA:CB:69:F1:6A
+<strong>SHA-256 hash of the signing certificate:</strong><br />F3:57:E7:FF:95:92:07:84:F5:74:82:DF:D1:82:C7:76:C1:C3:9B:10:FC:1E:14:E1:EA:01:C0:C7:D3:63:0E:1C
 <br /><br />
 <strong>English</strong> · <a href="README.de.md">Deutsch</a>
 </div>
