@@ -62,7 +62,7 @@ jobs:
           if [ "${{ steps.version.outputs.IS_PRERELEASE }}" = "true" ]; then
             ./gradlew assembleStandardBeta --no-daemon --stacktrace
           else
-            ./gradlew assembleStandardRelease assembleFdroidRelease --no-daemon --stacktrace
+            ./gradlew assembleStandardRelease --no-daemon --stacktrace
           fi
 
       - name: Run tests
@@ -78,8 +78,6 @@ jobs:
           else
             cp android/app/build/outputs/apk/standard/release/app-standard-release.apk \
                apk-output/second-notes-v${VERSION}-standard.apk
-            cp android/app/build/outputs/apk/fdroid/release/app-fdroid-release.apk \
-               apk-output/second-notes-v${VERSION}-fdroid.apk
           fi
           echo "✅ APK files prepared:"
           ls -lh apk-output/
