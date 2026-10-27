@@ -60,11 +60,11 @@ jobs:
           
           # Standard Flavor
           cp android/app/build/outputs/apk/standard/release/app-standard-release.apk \
-             apk-output/simple-notes-sync-v${{ env.VERSION_NAME }}-standard.apk
+             apk-output/second-notes-v${{ env.VERSION_NAME }}-standard.apk
           
           # F-Droid Flavor
           cp android/app/build/outputs/apk/fdroid/release/app-fdroid-release.apk \
-             apk-output/simple-notes-sync-v${{ env.VERSION_NAME }}-fdroid.apk
+             apk-output/second-notes-v${{ env.VERSION_NAME }}-fdroid.apk
           
           echo "✅ APK files prepared:"
           ls -lh apk-output/
@@ -72,7 +72,7 @@ jobs:
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: simple-notes-sync-apks-v${{ env.VERSION_NAME }}
+          name: second-notes-apks-v${{ env.VERSION_NAME }}
           path: apk-output/*.apk
           retention-days: 90  # Keep production builds longer
       
