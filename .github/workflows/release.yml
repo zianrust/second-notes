@@ -119,16 +119,11 @@ jobs:
           > the same key as the release builds, so it installs over a normal install and back.
           > Not published on F-Droid.
 
-          | Variant | File | Info |
-          |---------|------|------|
-          | **Beta** | \`second-notes-v${VERSION}-standard.apk\` | Works on all devices |
+          **Beta** -- \`second-notes-v${VERSION}-standard.apk\`
           EOF
           else
             cat <<EOF >> $GITHUB_ENV
-          | Variant | File | Info |
-          |---------|------|------|
-          | **🏆 Recommended** | \`second-notes-v${VERSION}-standard.apk\` | Standard version (works on all devices) |
-          | F-Droid | \`second-notes-v${VERSION}-fdroid.apk\` | For F-Droid Store |
+          **Stable** -- \`second-notes-v${VERSION}-standard.apk\`
           EOF
           fi
           echo "GHADELIMITER" >> $GITHUB_ENV
