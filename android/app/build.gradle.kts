@@ -12,7 +12,7 @@ import java.util.Date
 import java.util.Locale
 
 android {
-    namespace = "xyz.zianrust.secondnotes"
+    namespace = "dev.dettmer.simplenotes"
     compileSdk = 37
 
     defaultConfig {
