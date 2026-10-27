@@ -58,6 +58,7 @@ jobs:
       - name: Build APKs
         run: |
           cd android
+          ./gradlew clean
           if [ "${{ steps.version.outputs.IS_PRERELEASE }}" = "true" ]; then
             ./gradlew assembleStandardBeta --no-daemon --stacktrace
           else
