@@ -16,7 +16,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "dev.dettmer.simplenotes"
+        applicationId = "xyz.zianrust.secondnotes"
         minSdk = 24
         targetSdk = 36
         versionCode = 69  // 🆕 v2.21.0 - trust self-signed certificates, content edit time, real checkboxes
