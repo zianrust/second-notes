@@ -1,0 +1,72 @@
+name: Auto Sync Upstream
+
+on:
+  schedule:
+    # Runs once a day. Adjust the cron expression if you want a different time.
+    - cron: '0 6 * * *'
+  workflow_dispatch: # "Run workflow" button for manual triggers
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history + tags
+          # A PAT is required so the push below triggers the Release workflow.
+          # GITHUB_TOKEN pushes do not trigger further workflow runs.
+          token: ${{ secrets.SYNC_PAT }}
+          ref: main
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/inventory69/simple-notes-sync.git
+
+      - name: Fetch upstream
+        run: git fetch upstream --tags
+
+      - name: Merge upstream changes
+        run: |
+          git merge upstream/main --no-edit -X ours
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(grep 'versionName = ' android/app/build.gradle.kts | sed 's/.*versionName = "\(.*\)".*/\1/')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Upstream version: $VERSION"
+
+      - name: Create stable release tag on the merged commit
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          TAG="v${VERSION}"
+          # Only tag stable releases (no -beta / pre-release suffix).
+          if [[ "$TAG" == *-* ]]; then
+            echo "Pre-release version ($TAG) - skipping tag creation"
+            exit 0
+          fi
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists"
+          else
+            git tag "$TAG"
+            echo "Created tag $TAG"
+          fi
+
+      - name: Push branch and stable tag
+        run: |
+          git push origin main
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          TAG="v${VERSION}"
+          if [[ "$TAG" != *-* ]]; then
+            git push origin "$TAG" || true
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.SYNC_PAT }}

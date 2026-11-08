@@ -131,9 +131,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: "📝 Second Notes v${{ steps.version.outputs.VERSION }}"
-          # Finale Releases bleiben Draft (manuell prüfen und veröffentlichen).
-          # Pre-Releases gehen direkt raus, sonst wartet der Tester auf einen Klick.
-          draft: ${{ steps.version.outputs.IS_PRERELEASE != 'true' }}
+          # Auto-synced releases are published automatically. Pre-releases go out
+          # immediately too, so testers do not wait for a manual click.
+          draft: false
           prerelease: ${{ steps.version.outputs.IS_PRERELEASE == 'true' }}
           generate_release_notes: false
           files: apk-output/*.apk
