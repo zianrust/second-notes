@@ -59,7 +59,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Upstream version: $VERSION"
 
-      - name: Create stable release tag on the merged commit
+      - name: Create or update the stable release tag on the merged commit
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
           TAG="v${VERSION}"
@@ -68,20 +68,28 @@ jobs:
             echo "Pre-release version ($TAG) - skipping tag creation"
             exit 0
           fi
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists"
-          else
-            git tag "$TAG"
-            echo "Created tag $TAG"
-          fi
+          # Upstream ships a tag with the same name. Drop it locally so the tag
+          # points at this fork's merged (customized) commit instead.
+          git tag -d "$TAG" >/dev/null 2>&1 || true
+          git tag "$TAG"
+          echo "Tagged $TAG -> $(git rev-parse --short "$TAG")"
 
-      - name: Push branch and stable tag
+      - name: Push branch and stable tag (only if changed)
         run: |
           git push origin main
           VERSION="${{ steps.version.outputs.VERSION }}"
           TAG="v${VERSION}"
-          if [[ "$TAG" != *-* ]]; then
-            git push origin "$TAG" || true
+          if [[ "$TAG" == *-* ]]; then
+            echo "Pre-release version - skipping tag push"
+            exit 0
+          fi
+          LOCAL_SHA=$(git rev-parse "$TAG")
+          REMOTE_SHA=$(git ls-remote origin "refs/tags/$TAG" | awk '{print $1}')
+          if [ "$REMOTE_SHA" = "$LOCAL_SHA" ]; then
+            echo "Tag $TAG already points at $LOCAL_SHA on origin - no push needed"
+          else
+            echo "Updating origin tag $TAG ($REMOTE_SHA -> $LOCAL_SHA)"
+            git push origin "+$TAG"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.SYNC_PAT }}
