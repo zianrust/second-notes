@@ -48,11 +48,11 @@ jobs:
 
       - name: Configure Android signing
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/simple-notes-release.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/second-notes-release.jks
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
-          echo "storeFile=simple-notes-release.jks" >> android/key.properties
+          echo "storeFile=second-notes-release.jks" >> android/key.properties
           echo "✅ Signing configuration created"
 
       - name: Build APKs
@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Run tests
-        run: cd android && ./gradlew testFdroidDebugUnitTest testStandardDebugUnitTest
+        run: cd android && ./gradlew testStandardDebugUnitTest
 
       - name: Copy APKs with version names
         run: |
@@ -116,7 +116,6 @@ jobs:
           > log to a report - Settings → Debug & Diagnostics to export or switch it off. Exported
           > logs have your server address, user name and note titles replaced. It is signed with
           > the same key as the release builds, so it installs over a normal install and back.
-          > Not published on F-Droid.
 
           **Beta** -- \`second-notes-v${VERSION}-standard.apk\`
           EOF
@@ -142,13 +141,6 @@ jobs:
 
             ${{ env.CHANGELOG_EN }}
 
-            <details>
-            <summary>🇩🇪 German Version</summary>
-
-            ${{ env.CHANGELOG_DE }}
-
-            </details>
-
             ## 📦 Downloads
 
             ${{ env.DOWNLOADS }}
@@ -162,14 +154,10 @@ jobs:
 
             All APKs are signed with the official release certificate.
 
-            **Recommended:** Verify with [AppVerifier](https://github.com/soupslurpr/AppVerifier) (Android app)
-
             **Expected SHA-256:**
             ```
-            42:A1:C6:13:BB:C6:73:04:5A:F3:DC:81:91:BF:9C:B6:45:6E:E4:4C:7D:CE:40:C7:CF:B5:66:FA:CB:69:F1:6A
+            4C:3C:8E:5C:EB:D9:73:A9:B9:9A:E0:EB:6D:7B:44:17:01:CB:5B:DB:AF:F4:E2:7C:B5:AF:D4:4F:F6:EA:FB:43
             ```
-
-            **[📖 Documentation](https://github.com/zianrust/second-notes/blob/main/QUICKSTART.md)** · **[🐛 Report Bug](https://github.com/zianrust/second-notes/issues)**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
