@@ -37,6 +37,21 @@ jobs:
         run: |
           git merge upstream/main --no-edit -X ours
 
+      - name: Drop workflows not used by this fork
+        run: |
+          for f in \
+            .github/workflows/pr-build-check.yml \
+            .github/workflows/weblate-build-check.yml \
+            .github/workflows/weblate-merge.yml \
+            .github/workflows/deploy-google-play.yml
+          do
+            rm -f "$f"
+          done
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Remove upstream-only workflows not used by this fork"
+          fi
+
       - name: Read version
         id: version
         run: |
