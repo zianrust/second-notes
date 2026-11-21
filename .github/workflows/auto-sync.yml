@@ -35,7 +35,17 @@ jobs:
 
       - name: Merge upstream changes
         run: |
-          git merge upstream/main --no-edit -X ours
+          git merge upstream/main --no-edit -X ours || {
+            echo "Merge conflict while merging upstream/main - resolving by removing upstream-only workflows not used by this fork"
+            git rm -q \
+              .github/workflows/pr-build-check.yml \
+              .github/workflows/weblate-build-check.yml \
+              .github/workflows/weblate-merge.yml \
+              .github/workflows/deploy-google-play.yml \
+              || true
+            git add -A
+            git commit --no-edit
+          }
 
       - name: Drop workflows not used by this fork
         run: |
